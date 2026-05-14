@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+<nav>
+  <span class="brand">SecureApp</span>
+  <div>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/search">Search</a>
+    <a href="/logout">Logout</a>
+    <span style="color:#aaa; margin-left:12px; font-size:13px"><%= user.username %> <span class="badge admin">admin</span></span>
+  </div>
+</nav>
+<div class="container">
+  <div class="card">
+    <h2>Admin Panel</h2>
+    <p style="color:#888; font-size:13px; margin-bottom:16px">Manage all users</p>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <% users.forEach(u => { %>
+          <tr>
+            <td><%= u.id %></td>
+            <td><%= u.username %></td>
+            <td><%= u.email %></td>
+            <td><span class="tag <%= u.role === 'admin' ? 'tag-admin' : 'tag-user' %>"><%= u.role %></span></td>
+            <td>
+              <% if (u.role !== 'admin') { %>
+                <!-- VULNERABILITY: no CSRF token in this form -->
+                <form method="POST" action="/admin/promote" style="display:inline">
+                  <input type="hidden" name="username" value="<%= u.username %>">
+                  <button type="submit" style="padding:4px 10px; font-size:12px">Promote</button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="card" style="background:#fff8f0; border:1px solid #f5a623">
+    <h3 style="color:#856404; margin-bottom:8px">CSRF Vulnerability Note</h3>
+    <p style="font-size:13px; color:#666; line-height:1.6">
+      The promote endpoint accepts any POST with no token check.<br>
+      An XSS payload in the search page can call this endpoint silently using <code>fetch()</code> with the admin's session cookie.
+    </p>
+  </div>
+</div>
+</body></html>

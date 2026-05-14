@@ -1,0 +1,50 @@
+<%- include('partials/header') %>
+<nav>
+  <span class="brand">SecureApp</span>
+  <div>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/search">Search</a>
+    <a href="/logout">Logout</a>
+    <span style="color:#aaa; margin-left:12px; font-size:13px"><%= user.username %> <span class="badge admin">admin</span></span>
+  </div>
+</nav>
+<div class="container">
+  <div class="card">
+    <h2>Admin Panel</h2>
+    <p style="color:#888; font-size:13px; margin-bottom:16px">Manage all users</p>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <% users.forEach(u => { %>
+          <tr>
+            <td><%= u.id %></td>
+            <td><%= u.username %></td>
+            <td><%= u.email %></td>
+            <td><span class="tag <%= u.role === 'admin' ? 'tag-admin' : 'tag-user' %>"><%= u.role %></span></td>
+            <td>
+              <% if (u.role !== 'admin') { %>
+                <!-- FIX: CSRF token included as hidden field — server validates it -->
+                <form method="POST" action="/admin/promote" style="display:inline">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                  <input type="hidden" name="username" value="<%= u.username %>">
+                  <button type="submit" style="padding:4px 10px; font-size:12px">Promote</button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <div class="card" style="background:#f0fff4; border:1px solid #38a169">
+    <h3 style="color:#276749; margin-bottom:8px">CSRF Protection Active</h3>
+    <p style="font-size:13px; color:#555; line-height:1.6">
+      Every promote form includes a hidden <code>_csrf</code> token generated server-side.<br>
+      The server validates it on every POST — a forged request from XSS will not have this token and will be rejected with <strong>403 Forbidden</strong>.<br>
+      Cookie is also <code>HttpOnly</code> — JS cannot read it even if XSS runs.
+    </p>
+  </div>
+</div>
+</body></html>

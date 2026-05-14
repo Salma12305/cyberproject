@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureApp Demo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f0f2f5; color: #333; }
+    nav {
+      background: #1a1a2e; color: white; padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    nav .brand { font-size: 18px; font-weight: bold; color: #e94560; }
+    nav a { color: #ccc; text-decoration: none; margin-left: 16px; font-size: 14px; }
+    nav a:hover { color: white; }
+    .badge { background: #e94560; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 8px; }
+    .badge.admin { background: #f5a623; }
+    .container { max-width: 900px; margin: 32px auto; padding: 0 16px; }
+    .card { background: white; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; }
+    h1, h2 { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; font-size: 14px; color: #555; }
+    input[type=text], input[type=email], input[type=password] { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; margin-bottom: 14px; }
+    button, .btn { background: #e94560; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; display: inline-block; }
+    button:hover, .btn:hover { background: #c73652; }
+    .btn-secondary { background: #1a1a2e; margin-left: 8px; }
+    .error { background: #fff0f0; border: 1px solid #e94560; color: #c00; padding: 10px 14px; border-radius: 6px; margin-bottom: 14px; font-size: 14px; }
+    .success { background: #f0fff4; border: 1px solid #38a169; color: #276749; padding: 10px 14px; border-radius: 6px; margin-bottom: 14px; font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { background: #f7f7f7; text-align: left; padding: 10px 12px; border-bottom: 2px solid #eee; }
+    td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+    .tag-admin { background: #fff3cd; color: #856404; }
+    .tag-user  { background: #e2e3e5; color: #383d41; }
+    .vuln-banner { background: #e94560; color: white; text-align: center; padding: 8px; font-size: 13px; font-weight: bold; }
+    .secure-banner { background: #38a169; color: white; text-align: center; padding: 8px; font-size: 13px; font-weight: bold; }
+  </style>
+</head>
+<body>
+<% if (typeof secure !== 'undefined' && secure) { %>
+  <div class="secure-banner">SECURE VERSION — running on port 4000</div>
+<% } else { %>
+  <div class="vuln-banner">VULNERABLE VERSION — running on port 3000</div>
+<% } %>

@@ -1,0 +1,54 @@
+<%- include('partials/header') %>
+<nav>
+  <span class="brand">SecureApp</span>
+  <div>
+    <a href="/dashboard">Dashboard</a>
+    <% if (user.role === 'admin') { %><a href="/admin">Admin</a><% } %>
+    <a href="/logout">Logout</a>
+    <span style="color:#aaa; margin-left:12px; font-size:13px"><%= user.username %></span>
+  </div>
+</nav>
+<div class="container">
+  <div class="card">
+    <h2>Search Users</h2>
+    <form method="GET" action="/search" style="display:flex; gap:8px; margin-bottom:20px">
+      <input type="text" name="q" value="<%= q %>" placeholder="Search by username..." style="margin:0; flex:1">
+      <button type="submit">Search</button>
+    </form>
+
+    <% if (q) { %>
+      <!-- FIXED: q has been escaped server-side — any <script> tag becomes plain text -->
+      <p style="font-size:13px; color:#888; margin-bottom:12px">Results for: <%= q %></p>
+    <% } %>
+
+    <% if (results.length > 0) { %>
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th></tr>
+        </thead>
+        <tbody>
+          <% results.forEach(u => { %>
+            <tr>
+              <td><%= u.id %></td>
+              <td><%= u.username %></td>
+              <td><%= u.email %></td>
+              <td><span class="tag <%= u.role === 'admin' ? 'tag-admin' : 'tag-user' %>"><%= u.role %></span></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else if (q) { %>
+      <p style="color:#888; font-size:14px">No results found.</p>
+    <% } %>
+  </div>
+
+  <div class="card" style="background:#f0fff4; border:1px solid #38a169">
+    <h3 style="color:#276749; margin-bottom:8px">Security Fixes Active</h3>
+    <p style="font-size:13px; color:#555; line-height:1.6">
+      <strong>SQLi fixed:</strong> Query uses <code>?</code> parameterized placeholder — input cannot break out of the string.<br>
+      <strong>XSS fixed:</strong> <code>escapeHtml()</code> runs on <code>q</code> before rendering — script tags become plain text.<br>
+      <strong>Errors hidden:</strong> DB errors are not shown to the user.
+    </p>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+<nav>
+  <span class="brand">SecureApp</span>
+  <div>
+    <% if (user) { %>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/search">Search</a>
+      <% if (user.role === 'admin') { %><a href="/admin">Admin</a><% } %>
+      <a href="/logout">Logout</a>
+      <span style="color:#aaa; margin-left:12px; font-size:13px"><%= user.username %> <span class="badge <%= user.role === 'admin' ? 'admin' : '' %>"><%= user.role %></span></span>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    <% } %>
+  </div>
+</nav>
+<div class="container">
+  <div class="card">
+    <h1>Welcome to SecureApp</h1>
+    <p style="color:#666; margin-bottom:20px">A demo application for the security assignment.</p>
+    <% if (!user) { %>
+      <a href="/register" class="btn">Register</a>
+      <a href="/login" class="btn btn-secondary">Login</a>
+    <% } else { %>
+      <a href="/dashboard" class="btn">Go to Dashboard</a>
+    <% } %>
+  </div>
+</div>
+</body></html>

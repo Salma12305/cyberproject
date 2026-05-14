@@ -1,0 +1,18 @@
+<%- include('partials/header') %>
+<nav><span class="brand">SecureApp</span><div><a href="/login">Login</a></div></nav>
+<div class="container" style="max-width:420px">
+  <div class="card">
+    <h2>Register</h2>
+    <% if (error) { %><div class="error"><%= error %></div><% } %>
+    <form method="POST" action="/register">
+      <label>Username</label>
+      <input type="text" name="username" required>
+      <label>Email</label>
+      <input type="email" name="email" required>
+      <label>Password</label>
+      <input type="password" name="password" required>
+      <button type="submit">Create Account</button>
+    </form>
+  </div>
+</div>
+</body></html>

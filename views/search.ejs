@@ -1,0 +1,59 @@
+<%- include('partials/header') %>
+<nav>
+  <span class="brand">SecureApp</span>
+  <div>
+    <a href="/dashboard">Dashboard</a>
+    <% if (user.role === 'admin') { %><a href="/admin">Admin</a><% } %>
+    <a href="/logout">Logout</a>
+    <span style="color:#aaa; margin-left:12px; font-size:13px"><%= user.username %></span>
+  </div>
+</nav>
+<div class="container">
+  <div class="card">
+    <h2>Search Users</h2>
+    <form method="GET" action="/search" style="display:flex; gap:8px; margin-bottom:20px">
+      <input type="text" name="q" value="<%= q %>" placeholder="Search by username..." style="margin:0; flex:1">
+      <button type="submit">Search</button>
+    </form>
+
+    <% if (q) { %>
+      <!-- VULNERABILITY: q is rendered raw — if it contains <script>, it executes -->
+      <p style="font-size:13px; color:#888; margin-bottom:12px">Results for: <%- q %></p>
+    <% } %>
+
+    <% if (error) { %>
+      <!-- SQL errors shown to user — helpful for attackers doing SQLi reconnaissance -->
+      <div class="error">DB Error: <%= error %></div>
+    <% } %>
+
+    <% if (results.length > 0) { %>
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th></tr>
+        </thead>
+        <tbody>
+          <% results.forEach(u => { %>
+            <tr>
+              <td><%= u.id %></td>
+              <td><%= u.username %></td>
+              <td><%= u.email %></td>
+              <td><span class="tag <%= u.role === 'admin' ? 'tag-admin' : 'tag-user' %>"><%= u.role %></span></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } else if (q) { %>
+      <p style="color:#888; font-size:14px">No results found.</p>
+    <% } %>
+  </div>
+
+  <div class="card" style="background:#fff8f0; border:1px solid #f5a623">
+    <h3 style="color:#856404; margin-bottom:8px">Vulnerability Notes (for demo)</h3>
+    <p style="font-size:13px; color:#666; line-height:1.6">
+      <strong>SQLi:</strong> Try searching: <code>' UNION SELECT id,username,email,role FROM users--</code><br>
+      <strong>XSS:</strong> The "Results for:" line renders raw HTML. Any script tag in the URL executes.<br>
+      <strong>CSRF:</strong> POST to <code>/admin/promote</code> with body <code>username=attacker</code> — no token needed.
+    </p>
+  </div>
+</div>
+</body></html>

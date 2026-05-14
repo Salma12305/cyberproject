@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+<nav>
+  <span class="brand">SecureApp</span>
+  <div>
+    <a href="/search">Search Users</a>
+    <% if (user.role === 'admin') { %><a href="/admin">Admin Panel</a><% } %>
+    <a href="/logout">Logout</a>
+    <span style="color:#aaa; margin-left:12px; font-size:13px">
+      <%= user.username %> <span class="badge <%= user.role === 'admin' ? 'admin' : '' %>"><%= user.role %></span>
+    </span>
+  </div>
+</nav>
+<div class="container">
+  <div class="card">
+    <h2>Welcome, <%= user.username %></h2>
+    <p style="color:#666; margin-bottom:16px">Your role: <strong><%= user.role %></strong></p>
+    <% if (user.role === 'admin') { %>
+      <div class="success">You have admin privileges! You can access the <a href="/admin">Admin Panel</a>.</div>
+    <% } else { %>
+      <p style="color:#888; font-size:14px">You are a regular user. You do not have access to the admin panel.</p>
+    <% } %>
+    <div style="margin-top:20px">
+      <a href="/search" class="btn">Search Users</a>
+    </div>
+  </div>
+</div>
+</body></html>
