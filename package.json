@@ -4,6 +4,7 @@
   "description": "Chained vulnerabilities demo",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "vulnerable": "node server.js",
     "secure": "node server_secure.js"
   },
